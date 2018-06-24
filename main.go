@@ -1,14 +1,16 @@
 package main
 
          import "github.com/kataras/iris"
+         
 
          func main() {
            app := iris.Default()
 
            // Method:   GET
            // Resource: http://localhost:8080/
+           app.RegisterView(iris.HTML("./public", ".html"))
            app.Handle("GET", "/", func(ctx iris.Context) {
-             ctx.HTML("Hello world!")
+             ctx.View("index.html")
            })
 
            // same as app.Handle("GET", "/ping", [...])
@@ -18,7 +20,8 @@ package main
              ctx.WriteString("pong")
            })
 					 
-					 app.StaticWeb("/js", "./public/assets/js")
+	   app.StaticWeb("/static/js", "./public/static/js")
+           app.StaticWeb("/static/css", "./public/static/css")
 
            // Method:   GET
            // Resource: http://localhost:8080/hello
