@@ -6,7 +6,13 @@ import (
   // "io"
    "io/ioutil"
    "fmt"
+   //"os"
+   "net/http"
+   "bytes"
 )
+
+var dispenserUrl = "http://172.2.100.4:9000/dispenser/template/full"
+
 type MetaData struct {
    MsName string `json:"msName"`
    TemplateName string `json:"templateName"`
@@ -17,7 +23,7 @@ type TemplateData struct {
    Head string  `json:"head"`
 }
 type NavigationData struct {
-   NavigationName string `json:"navigationData"`
+   NavigationName string `json:"navigationName"`
    Active string `json:"active"`
 }
 type Template struct {
@@ -25,7 +31,7 @@ type Template struct {
    NavigationData NavigationData `json:"navigationData"`
    TemplateData TemplateData `json:"templateData"`
 }
-func create_json() {
+func create_json()(string) {
    //Create Metadata
    metaData := MetaData{"Arise", "simple"}
    /*metaDataJson, _ := json.Marshal(metaData)
@@ -44,8 +50,19 @@ func create_json() {
    head64 := b64.StdEncoding.EncodeToString(head)
    templateData:= TemplateData {"Arise", content64, head64}
    template := Template {metaData, navigationData, templateData}
-   templateJson, _ := json.Marshal(template)
-   fmt.Printf("%+v\n", string(templateJson))
-  // response, _ := http.Post(dispenserURL, "application/json; charset=utf-8", templateJson)
+   templateJson := new(bytes.Buffer)
+   json.NewEncoder(templateJson).Encode(template)
+   //templateJson, _ := json.Marshal(template)
+   //fmt.Printf("%+v\n", string(templateJson))
+   fmt.Println(templateJson)
+   res, err := http.Post(dispenserUrl, "application/json; charset=utf-8", templateJson)
+   if err != nil {
+      fmt.Println(err)
+      return ""
+   }else{
+      buf := new(bytes.Buffer)
+      buf.ReadFrom(res.Body)
+      return buf.String()
+   }
 }
 
