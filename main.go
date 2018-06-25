@@ -26,6 +26,7 @@ package main
            // Method:   GET
            // Resource: http://localhost:8080/hello
            app.Get("/hello", func(ctx iris.Context) {
+              create_json()
              ctx.JSON(iris.Map{"message": "Hello iris web framework."})
            })
 
