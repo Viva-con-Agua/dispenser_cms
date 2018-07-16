@@ -4,11 +4,12 @@ RUN mkdir /go/src/project
 WORKDIR /go/src/project
 VOLUME /go/src/project
 # install iris framework 
-RUN go get -u github.com/kataras/iris
+RUN go get -u github.com/labstack/echo/...
 #install godep package manager 
 RUN go get github.com/tools/godep
 ADD main.go /go/src/project
+ADD dispenser.go /go/src/project
 ADD public  /go/src/project/public
 CMD ../../bin/godep save
-CMD go run main.go
+CMD go run main.go dispenser.go
 EXPOSE 8080

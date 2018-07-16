@@ -1,37 +1,17 @@
 package main
 
-         import "github.com/kataras/iris"
-         
+import (
+	"net/http"
+	
+	"github.com/labstack/echo"
+)
 
-         func main() {
-           app := iris.Default()
-
-           // Method:   GET
-           // Resource: http://localhost:8080/
-           app.RegisterView(iris.HTML("./public", ".html"))
-           app.Handle("GET", "/", func(ctx iris.Context) {
-             ctx.View("index.html")
-           })
-
-           // same as app.Handle("GET", "/ping", [...])
-           // Method:   GET
-           // Resource: http://localhost:8080/ping
-           app.Get("/ping", func(ctx iris.Context) {
-             ctx.WriteString("pong")
-           })
-					 
-	   app.StaticWeb("/static/js", "./public/static/js")
-           app.StaticWeb("/static/css", "./public/static/css")
-
-           // Method:   GET
-           // Resource: http://localhost:8080/hello
-           app.Get("/hello", func(ctx iris.Context) {
-              content := create_json()
-             ctx.WriteString(content)
-           })
-
-           // http://localhost:8080
-           // http://localhost:8080/ping
-           // http://localhost:8080/hello
-           app.Run(iris.Addr(":8080"))
-         }
+func main() {
+	e := echo.New()
+  e.Static("/ripple/static", "./public/static")
+	e.GET("/ripple/", func(c echo.Context) error {
+    content := create_json()
+		return c.HTML(http.StatusOK, content)
+	})
+	e.Logger.Fatal(e.Start(":8080"))
+}

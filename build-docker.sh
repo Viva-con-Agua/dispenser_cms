@@ -4,6 +4,6 @@ set -ex
 # docker hub username
 USERNAME=vivaconagua
 # image name
-IMAGE=dispenser-assets
+IMAGE=ripple-docker
 
 docker build -t $USERNAME/$IMAGE:latest .

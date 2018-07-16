@@ -11,7 +11,7 @@ import (
    "bytes"
 )
 
-var dispenserUrl = "http://172.2.100.4:9000/dispenser/template/full"
+var dispenserUrl = "http://172.2.100.4:9000/dispenser/template/main/widget"
 
 type MetaData struct {
    MsName string `json:"msName"`
@@ -32,11 +32,10 @@ type Template struct {
    TemplateData TemplateData `json:"templateData"`
 }
 func create_json()(string) {
+   
    //Create Metadata
    metaData := MetaData{"Arise", "simple"}
-   /*metaDataJson, _ := json.Marshal(metaData)
-   fmt.Printf("%+v\n", string(metaDataJson))*/
-
+   
    //Create NavigationData
    navigationData:= NavigationData {"Drops", ""}
    
@@ -48,13 +47,10 @@ func create_json()(string) {
    head, _ := ioutil.ReadFile("public/head.html")
    content64 := b64.StdEncoding.EncodeToString(content)
    head64 := b64.StdEncoding.EncodeToString(head)
-   templateData:= TemplateData {"Arise", content64, head64}
+   templateData:= TemplateData {"Ripple", content64, head64}
    template := Template {metaData, navigationData, templateData}
    templateJson := new(bytes.Buffer)
    json.NewEncoder(templateJson).Encode(template)
-   //templateJson, _ := json.Marshal(template)
-   //fmt.Printf("%+v\n", string(templateJson))
-   fmt.Println(templateJson)
    res, err := http.Post(dispenserUrl, "application/json; charset=utf-8", templateJson)
    if err != nil {
       fmt.Println(err)
