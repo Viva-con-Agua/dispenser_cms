@@ -2,14 +2,27 @@ package main
 
 import (
 	"net/http"
-	
+  "fmt"
+	"github.com/tkanos/gonfig"
 	"github.com/labstack/echo"
 )
 
+type Configuration struct {
+    Port              int
+    Name              string
+    ContextPath       string
+}
+
+
+
 func main() {
+  config := Configuration{}
+  err := gonfig.GetConf("conf/docker.config.json", &config)  
+  fmt.Println(err)
 	e := echo.New()
-  e.Static("/ripple/static", "./public/static")
-	e.GET("/ripple/", func(c echo.Context) error {
+  frontend := e.Group(config.ContextPath)
+  frontend.Static("/static", "./public/static")
+	frontend.GET("/", func(c echo.Context) error {
     content := create_json()
 		return c.HTML(http.StatusOK, content)
 	})
