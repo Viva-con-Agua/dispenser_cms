@@ -4,6 +4,6 @@ set -ex
 # docker hub username
 USERNAME=vivaconagua
 # image name
-IMAGE=ripple-docker
+IMAGE=arise-docker
 
 docker build -t $USERNAME/$IMAGE:latest .
