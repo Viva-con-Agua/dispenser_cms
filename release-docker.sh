@@ -4,7 +4,7 @@ set -ex
 # docker hub username
 USERNAME=vivaconagua
 # image name
-IMAGE=dispenser-assets
+IMAGE=arise
 
 version=`cat VERSION`
 echo "version: $version"

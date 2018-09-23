@@ -31,7 +31,17 @@ type Template struct {
    NavigationData NavigationData `json:"navigationData"`
    TemplateData TemplateData `json:"templateData"`
 }
-func create_json()(string) {
+
+func loadFile(path string)[]byte {
+  if file, err := ioutil.ReadFile(path); err != nil {
+    fmt.Println(err)
+    return []byte{0}
+  }else{
+    return file
+  }
+}
+
+func createJson()(string) {
    
    //Create Metadata
    metaData := MetaData{"Arise", "simple"}
@@ -43,18 +53,19 @@ func create_json()(string) {
       - load content and head from file
       - convert to Base64
    */
-   content, _ := ioutil.ReadFile("public/content.html")
-   head, _ := ioutil.ReadFile("public/head.html")
+   //Load content file and head file
+   content := loadFile("public/content.html")
+   head := loadFile("public/head.html")
    content64 := b64.StdEncoding.EncodeToString(content)
    head64 := b64.StdEncoding.EncodeToString(head)
-   templateData:= TemplateData {"Ripple", content64, head64}
+   templateData:= TemplateData {"Arise", content64, head64}
    template := Template {metaData, navigationData, templateData}
    templateJson := new(bytes.Buffer)
    json.NewEncoder(templateJson).Encode(template)
    res, err := http.Post(dispenserUrl, "application/json; charset=utf-8", templateJson)
    if err != nil {
       fmt.Println(err)
-      return ""
+      return string(loadFile("public/index.html"))
    }else{
       buf := new(bytes.Buffer)
       buf.ReadFrom(res.Body)

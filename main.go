@@ -23,7 +23,7 @@ func main() {
   frontend := e.Group(config.ContextPath)
   frontend.Static("/static", "./public/static")
 	frontend.GET("/", func(c echo.Context) error {
-    content := create_json()
+    content := createJson()
 		return c.HTML(http.StatusOK, content)
 	})
 	e.Logger.Fatal(e.Start(":8080"))
